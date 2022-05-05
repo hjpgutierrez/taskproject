@@ -1,11 +1,9 @@
-const { Model, references } = require("./model");
+const { Model } = require("./model");
 
 exports.all = async (req, res, next) => {
   try {
-    const populate = [...Object.getOwnPropertyNames(references)].join(" ");
-
     const [data = [], total = 0] = await Promise.all([
-      Model.find({}).populate(populate).exec(),
+      Model.find({}).exec(),
       Model.countDocuments(),
     ]);
 
@@ -61,14 +59,6 @@ exports.id = async (req, res, next) => {
   }
 };
 
-exports.read = async (req, res, next) => {
-  const { doc = {} } = req;
-
-  res.json({
-    data: doc,
-  });
-};
-
 exports.update = async (req, res, next) => {
   const { body = {}, params = {} } = req;
   const { id } = params;
@@ -77,20 +67,6 @@ exports.update = async (req, res, next) => {
     const data = await Model.findByIdAndUpdate(id, body, {
       new: true,
     });
-    res.json({
-      data,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.delete = async (req, res, next) => {
-  const { params = {} } = req;
-  const { id } = params;
-
-  try {
-    const data = await Model.findByIdAndDelete(id);
     res.json({
       data,
     });

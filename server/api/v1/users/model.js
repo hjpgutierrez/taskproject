@@ -33,6 +33,11 @@ const fields = {
     type: Boolean,
     default: true,
   },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+  },
 };
 
 const user = new Schema(fields, {
@@ -51,6 +56,7 @@ user.virtual("name").get(function () {
 
 user.methods.toJSON = function () {
   const doc = this.toObject();
+  delete doc.password;
   return doc;
 };
 

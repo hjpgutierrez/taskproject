@@ -11,7 +11,8 @@ const controller = require("./controller");
  * /api/v1/tasks/:id DELETE Delete
  */
 
-router.route("/").get(controller.all).post(controller.create);
+router.route("/tasks/:userid").get(controller.all);
+router.route("/").post(controller.create);
 
 router.param("id", controller.id);
 

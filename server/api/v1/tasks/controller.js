@@ -1,22 +1,23 @@
-const { Model, references } = require("./model");
+const { Model } = require("./model");
 
 exports.all = async (req, res, next) => {
   try {
-    const populate = [...Object.getOwnPropertyNames(references)].join(" ");
+    const { params = {} } = req;
+    const { userid = "" } = params;
+    console.log("all " + userid);
+
+    // const [data = []] = await Model.find({userId: userid}).sort({ createdAt: "desc" }).exec();
 
     const [data = [], total = 0] = await Promise.all([
-      Model.find({}).populate(populate).exec(),
+      Model.find({ userId: userid }).sort({ createdAt: "desc" }).exec(),
       Model.countDocuments(),
     ]);
 
-    // const data = await Model.find({}).limit(limit).skip(skip).exec();
-    // const total = await Model.countDocuments();
+    console.log("data " + data);
+    console.log("total " + total);
 
     res.json({
       data,
-      meta: {
-        total,
-      },
     });
   } catch (error) {
     next(error);
@@ -43,7 +44,7 @@ exports.create = async (req, res, next) => {
 exports.id = async (req, res, next) => {
   const { params = {} } = req;
   const { id = "" } = params;
-
+  console.log("id " + id);
   try {
     const data = await Model.findById(id).exec();
 

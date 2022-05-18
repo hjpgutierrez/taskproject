@@ -38,6 +38,33 @@ exports.create = async (req, res, next) => {
   }
 };
 
+exports.signin = async (req, res, next) => {
+  const { body = {} } = req;
+  const { email = "", password = "" } = body;
+
+  const document = await Model.findOne({ email });
+
+  if (document) {
+    const verified = (await document.password) == password;
+    if (verified) {
+      res.json({
+        data: document,
+        meta: {
+          id: document._id,
+        },
+      });
+    } else {
+      next({
+        message: "Username or password are incorrect",
+      });
+    }
+  } else {
+    next({
+      message: "Username or password are incorrect",
+    });
+  }
+};
+
 exports.id = async (req, res, next) => {
   const { params = {} } = req;
   const { id = "" } = params;

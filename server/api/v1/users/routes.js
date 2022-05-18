@@ -9,7 +9,8 @@ const controller = require("./controller");
  * /api/v1/users/:id PUT    Update
  */
 
-router.route("/").post(controller.create).get(controller.all);
+router.route("/signup").post(controller.create);
+router.route("/signin").post(controller.signin);
 
 router.param("id", controller.id);
 
